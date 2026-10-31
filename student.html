@@ -1,0 +1,906 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GOODSPACE - All in One</title>
+
+<style>
+:root {
+  --bg:#f3f5fc;
+  --card:#ffffff;
+  --text:#19233b;
+  --muted:#78839a;
+  --primary:#6558e8;
+  --line:#e4e8f1;
+}
+body.dark {
+  --bg:#101729;
+  --card:#1b263c;
+  --text:#f0f3ff;
+  --muted:#aab5ca;
+  --line:#344059;
+}
+* {box-sizing:border-box}
+body {
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+}
+button,input,textarea,select {font:inherit}
+button {cursor:pointer}
+.app {
+  display:flex;
+  min-height:100vh;
+}
+.sidebar {
+  width:245px;
+  background:#111b35;
+  color:white;
+  padding:25px 17px;
+  flex-shrink:0;
+}
+.logo {
+  font-size:25px;
+  font-weight:bold;
+  color:#67e4e0;
+  margin-bottom:35px;
+}
+.nav button {
+  width:100%;
+  padding:13px;
+  border:0;
+  border-radius:10px;
+  text-align:left;
+  background:transparent;
+  color:white;
+  margin:4px 0;
+}
+.nav button:hover,.nav button.active {
+  background:#34436a;
+}
+main {
+  flex:1;
+  min-width:0;
+  padding:25px;
+}
+.topbar {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:30px;
+}
+.topbar input {
+  max-width:350px;
+  flex:1;
+  padding:12px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:var(--card);
+  color:var(--text);
+}
+.btn {
+  border:0;
+  background:var(--primary);
+  color:white;
+  padding:11px 17px;
+  border-radius:10px;
+}
+.card {
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:20px;
+  margin-bottom:16px;
+}
+.hero {
+  background:linear-gradient(120deg,#293a83,#7453db,#22aaa8);
+  color:white;
+  border-radius:20px;
+  padding:35px;
+  margin-bottom:25px;
+}
+.hero h1 {font-size:34px}
+.hero p {color:#e4e8ff;line-height:1.6}
+.stats,.tools {
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:15px;
+  margin-bottom:25px;
+}
+.stat,.tool {
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:15px;
+  padding:18px;
+}
+.stat strong {
+  font-size:25px;
+}
+.tool {
+  color:var(--text);
+  text-align:left;
+  cursor:pointer;
+  transition:.2s;
+}
+.tool:hover {
+  transform:translateY(-4px);
+  border-color:var(--primary);
+}
+.emoji {
+  font-size:30px;
+  margin-bottom:10px;
+}
+.page {display:none}
+.page.active {display:block}
+h1 {margin-top:5px}
+h2 {font-size:21px}
+p {color:var(--muted)}
+.field {
+  width:100%;
+  padding:13px;
+  border:1px solid var(--line);
+  border-radius:10px;
+  margin:7px 0;
+  background:var(--card);
+  color:var(--text);
+}
+textarea {min-height:110px;resize:vertical}
+.list {
+  display:grid;
+  gap:10px;
+  margin-top:15px;
+}
+.item {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  padding:13px;
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:10px;
+}
+.item span {overflow-wrap:anywhere}
+.item button {
+  border:0;
+  background:#eeeaff;
+  color:#5144c5;
+  border-radius:8px;
+  padding:7px;
+}
+.completed {text-decoration:line-through;opacity:.5}
+.tabs {
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-bottom:15px;
+}
+.tabs button {
+  border:1px solid var(--line);
+  padding:8px 13px;
+  border-radius:20px;
+  background:var(--card);
+  color:var(--text);
+}
+.tabs button.active {
+  background:var(--primary);
+  color:white;
+}
+.timer {
+  font-size:65px;
+  text-align:center;
+  font-weight:bold;
+  margin:20px;
+}
+.timer-buttons {
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:10px;
+}
+.calc {
+  max-width:380px;
+  margin:auto;
+}
+.calc-display {
+  padding:20px;
+  font-size:30px;
+  text-align:right;
+  border-radius:12px;
+  background:var(--bg);
+  border:1px solid var(--line);
+  margin-bottom:10px;
+  overflow-wrap:anywhere;
+  min-height:75px;
+}
+.calc-grid {
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:8px;
+}
+.calc-grid button {
+  padding:18px;
+  border-radius:10px;
+  border:1px solid var(--line);
+  background:var(--card);
+  color:var(--text);
+  font-size:18px;
+}
+.calc-grid button.equal {
+  background:var(--primary);
+  color:white;
+}
+.result {
+  background:var(--bg);
+  border-radius:12px;
+  padding:20px;
+  margin-top:15px;
+  font-size:22px;
+}
+.quote {
+  background:linear-gradient(120deg,#283d82,#7152cf);
+  color:white;
+  padding:30px;
+  border-radius:15px;
+  margin-top:20px;
+}
+.quote p {color:white}
+footer {
+  text-align:center;
+  color:var(--muted);
+  padding:25px;
+}
+.mobile-nav {display:none}
+@media(max-width:900px) {
+  .stats,.tools {
+    grid-template-columns:repeat(2,1fr);
+  }
+}
+@media(max-width:650px) {
+  .app {display:block}
+  .sidebar {display:none}
+  main {padding:15px 13px 90px}
+  .hero {padding:25px}
+  .hero h1 {font-size:27px}
+  .stats,.tools {grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+  .stat,.tool {padding:13px}
+  .mobile-nav {
+    display:flex;
+    position:fixed;
+    bottom:0;
+    left:0;
+    right:0;
+    background:var(--card);
+    border-top:1px solid var(--line);
+    justify-content:space-around;
+    padding:10px 3px;
+    z-index:5;
+  }
+  .mobile-nav button {
+    border:0;
+    background:none;
+    color:var(--text);
+    font-size:11px;
+    padding:5px;
+  }
+  .timer {font-size:52px}
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+<aside class="sidebar">
+  <div class="logo">✦ GOODSPACE</div>
+  <div class="nav">
+    <button class="active" data-page="home">🏠 Home</button>
+    <button data-page="tasks">✅ My Tasks</button>
+    <button data-page="notes">📝 Smart Notes</button>
+    <button data-page="focus">⏱️ Focus Timer</button>
+    <button data-page="calculator">🧮 Calculator</button>
+    <button data-page="converter">📏 Converter</button>
+    <button data-page="habits">🌱 Habit Tracker</button>
+    <button data-page="inspiration">☀️ Inspiration</button>
+    <button data-page="settings">⚙️ Settings</button>
+  </div>
+  <p style="color:#aebbd7;margin-top:35px">
+    Your everyday digital space.
+  </p>
+</aside>
+
+<main>
+<header class="topbar">
+  <input id="search" placeholder="🔍 Search applications...">
+  <button class="btn" id="theme">🌙</button>
+</header>
+
+<!-- HOME -->
+<section class="page active" id="home">
+  <div class="hero">
+    <h1>Welcome to GOODSPACE 🚀</h1>
+    <p>One place for useful applications, learning, creativity and everyday activities.</p>
+    <button class="btn" onclick="go('tasks')">Start your day →</button>
+  </div>
+
+  <h2>Your Activity</h2>
+  <div class="stats">
+    <div class="stat">✅<br><strong id="taskCount">0</strong><p>Completed tasks</p></div>
+    <div class="stat">📝<br><strong id="noteCount">0</strong><p>Saved notes</p></div>
+    <div class="stat">🌱<br><strong id="habitCount">0</strong><p>Habits completed today</p></div>
+    <div class="stat">⏱️<br><strong id="focusCount">0</strong><p>Focus sessions today</p></div>
+  </div>
+
+  <h2>Explore Applications</h2>
+  <div class="tools">
+    <button class="tool" onclick="go('tasks')"><div class="emoji">✅</div><b>Task Manager</b><p>Organize your day.</p></button>
+    <button class="tool" onclick="go('notes')"><div class="emoji">📝</div><b>Smart Notes</b><p>Save your ideas.</p></button>
+    <button class="tool" onclick="go('focus')"><div class="emoji">⏱️</div><b>Focus Timer</b><p>Manage study time.</p></button>
+    <button class="tool" onclick="go('calculator')"><div class="emoji">🧮</div><b>Calculator</b><p>Calculate easily.</p></button>
+    <button class="tool" onclick="go('converter')"><div class="emoji">📏</div><b>Unit Converter</b><p>Convert measurements.</p></button>
+    <button class="tool" onclick="go('habits')"><div class="emoji">🌱</div><b>Habit Tracker</b><p>Build positive habits.</p></button>
+    <button class="tool" onclick="go('inspiration')"><div class="emoji">☀️</div><b>Daily Inspiration</b><p>Positive messages.</p></button>
+    <button class="tool" onclick="go('settings')"><div class="emoji">💾</div><b>Backup Center</b><p>Protect your data.</p></button>
+  </div>
+
+  <div class="quote">
+    <h2>🌟 Today's Thought</h2>
+    <p id="dailyQuote">Small steps can lead to great achievements.</p>
+  </div>
+</section>
+
+<!-- TASKS -->
+<section class="page" id="tasks">
+  <h1>✅ My Tasks</h1>
+  <p>Organize your daily activities.</p>
+  <div class="card">
+    <form id="taskForm">
+      <input class="field" id="taskInput" placeholder="Enter a new task..." required>
+      <button class="btn">+ Add Task</button>
+    </form>
+    <div class="tabs">
+      <button class="active" onclick="taskFilter='all';renderTasks()">All</button>
+      <button onclick="taskFilter='open';renderTasks()">Pending</button>
+      <button onclick="taskFilter='done';renderTasks()">Completed</button>
+    </div>
+    <div class="list" id="taskList"></div>
+  </div>
+</section>
+
+<!-- NOTES -->
+<section class="page" id="notes">
+  <h1>📝 Smart Notes</h1>
+  <p>Write and save important ideas.</p>
+  <div class="card">
+    <form id="noteForm">
+      <input class="field" id="noteTitle" placeholder="Note title..." required>
+      <textarea class="field" id="noteText" placeholder="Write your note..." required></textarea>
+      <button class="btn">Save Note</button>
+    </form>
+  </div>
+  <div class="card">
+    <h2>Your Notes</h2>
+    <div class="list" id="noteList"></div>
+  </div>
+</section>
+
+<!-- TIMER -->
+<section class="page" id="focus">
+  <h1>⏱️ Focus Timer</h1>
+  <p>Give one task your attention at a time.</p>
+  <div class="card">
+    <div class="tabs">
+      <button onclick="setTimer(25)">25 minutes</button>
+      <button onclick="setTimer(5)">5 minute break</button>
+      <button onclick="setTimer(15)">15 minute break</button>
+    </div>
+    <div class="timer" id="timer">25:00</div>
+    <div class="timer-buttons">
+      <button class="btn" id="timerStart">▶ Start</button>
+      <button class="btn" onclick="resetTimer()">↻ Reset</button>
+    </div>
+  </div>
+</section>
+
+<!-- CALCULATOR -->
+<section class="page" id="calculator">
+  <h1>🧮 Calculator</h1>
+  <div class="card calc">
+    <div class="calc-display" id="display">0</div>
+    <div class="calc-grid">
+      <button onclick="calcClear()">AC</button>
+      <button onclick="calcAdd('(')">(</button>
+      <button onclick="calcAdd(')')">)</button>
+      <button onclick="calcAdd('/')">÷</button>
+      <button onclick="calcAdd('7')">7</button>
+      <button onclick="calcAdd('8')">8</button>
+      <button onclick="calcAdd('9')">9</button>
+      <button onclick="calcAdd('*')">×</button>
+      <button onclick="calcAdd('4')">4</button>
+      <button onclick="calcAdd('5')">5</button>
+      <button onclick="calcAdd('6')">6</button>
+      <button onclick="calcAdd('-')">−</button>
+      <button onclick="calcAdd('1')">1</button>
+      <button onclick="calcAdd('2')">2</button>
+      <button onclick="calcAdd('3')">3</button>
+      <button onclick="calcAdd('+')">+</button>
+      <button onclick="calcAdd('0')">0</button>
+      <button onclick="calcAdd('.')">.</button>
+      <button onclick="calcBack()">⌫</button>
+      <button class="equal" onclick="calculate()">=</button>
+    </div>
+  </div>
+</section>
+
+<!-- CONVERTER -->
+<section class="page" id="converter">
+  <h1>📏 Unit Converter</h1>
+  <div class="card">
+    <label>Choose conversion</label>
+    <select id="unitType" class="field" onchange="convert()">
+      <option value="length">Length</option>
+      <option value="weight">Weight</option>
+      <option value="temperature">Temperature</option>
+    </select>
+    <input class="field" id="unitValue" type="number" value="1" oninput="convert()">
+    <label>From</label>
+    <select class="field" id="unitFrom" onchange="convert()"></select>
+    <label>To</label>
+    <select class="field" id="unitTo" onchange="convert()"></select>
+    <div class="result" id="unitResult">100 cm</div>
+    <button class="btn" onclick="swapUnits()">⇄ Swap units</button>
+  </div>
+</section>
+
+<!-- HABITS -->
+<section class="page" id="habits">
+  <h1>🌱 Habit Tracker</h1>
+  <div class="card">
+    <form id="habitForm">
+      <input class="field" id="habitInput" placeholder="Add a positive habit..." required>
+      <button class="btn">Add Habit</button>
+    </form>
+    <div class="list" id="habitList"></div>
+  </div>
+</section>
+
+<!-- INSPIRATION -->
+<section class="page" id="inspiration">
+  <h1>☀️ Daily Inspiration</h1>
+  <div class="quote">
+    <h2>A Positive Thought</h2>
+    <p id="quoteText">You can make today a little better.</p>
+    <button class="btn" onclick="newQuote()">New Message</button>
+  </div>
+</section>
+
+<!-- SETTINGS -->
+<section class="page" id="settings">
+  <h1>⚙️ Settings & Backup</h1>
+  <div class="card">
+    <h2>Download your information</h2>
+    <p>Keep a backup of tasks, notes and habits.</p>
+    <button class="btn" onclick="exportData()">Download Backup</button>
+  </div>
+  <div class="card">
+    <h2>Restore your information</h2>
+    <input class="field" type="file" id="backupFile" accept=".json">
+    <button class="btn" onclick="importData()">Restore Backup</button>
+  </div>
+  <div class="card">
+    <h2>Privacy</h2>
+    <p>Your information stays in this browser in this version.</p>
+    <button class="btn" onclick="clearData()">Clear All Data</button>
+  </div>
+</section>
+
+<footer>GOODSPACE © 2026 | A little better, every day ✨</footer>
+</main>
+</div>
+
+<nav class="mobile-nav">
+  <button onclick="go('home')">🏠<br>Home</button>
+  <button onclick="go('tasks')">✅<br>Tasks</button>
+  <button onclick="go('notes')">📝<br>Notes</button>
+  <button onclick="go('focus')">⏱️<br>Focus</button>
+  <button onclick="go('settings')">⚙️<br>More</button>
+</nav>
+
+<script>
+// GOODSPACE DATA
+const KEY = "goodspace_data";
+function freshData() {
+  return {tasks:[],notes:[],habits:[],focus:0,focusDate:""};
+}
+function loadData() {
+  try {
+    const d=JSON.parse(localStorage.getItem(KEY));
+    return d && typeof d==="object" ? {
+      tasks:Array.isArray(d.tasks)?d.tasks:[],
+      notes:Array.isArray(d.notes)?d.notes:[],
+      habits:Array.isArray(d.habits)?d.habits:[],
+      focus:Number(d.focus)||0,
+      focusDate:d.focusDate||""
+    } : freshData();
+  } catch(e) {return freshData();}
+}
+let data=loadData();
+let taskFilter="all";
+
+function save() {
+  localStorage.setItem(KEY,JSON.stringify(data));
+  updateStats();
+}
+function today() {
+  const d=new Date();
+  return d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
+}
+function updateStats() {
+  document.getElementById("taskCount").textContent =
+    data.tasks.filter(t=>t.done).length;
+  document.getElementById("noteCount").textContent=data.notes.length;
+  const count=data.habits.filter(h=>h.date===today()).length;
+  document.getElementById("habitCount").textContent=count;
+  if(data.focusDate!==today()) {
+    data.focus=0;
+    data.focusDate=today();
+  }
+  document.getElementById("focusCount").textContent=data.focus;
+}
+function go(page) {
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  document.getElementById(page).classList.add("active");
+  document.querySelectorAll("[data-page]").forEach(b=>
+    b.classList.toggle("active",b.dataset.page===page)
+  );
+  window.scrollTo(0,0);
+}
+document.querySelectorAll("[data-page]").forEach(b=>
+  b.addEventListener("click",()=>go(b.dataset.page))
+);
+
+// SEARCH
+document.getElementById("search").addEventListener("input",function() {
+  const q=this.value.toLowerCase();
+  const found=[...document.querySelectorAll(".tool")].find(card=>
+    card.textContent.toLowerCase().includes(q)
+  );
+  if(found && q.length>1) {
+    found.click();
+  }
+});
+
+// DARK MODE
+document.getElementById("theme").addEventListener("click",()=>{
+  document.body.classList.toggle("dark");
+  localStorage.setItem("goodspace_theme",
+    document.body.classList.contains("dark")?"dark":"light");
+});
+if(localStorage.getItem("goodspace_theme")==="dark") {
+  document.body.classList.add("dark");
+}
+
+// TASKS
+document.getElementById("taskForm").addEventListener("submit",e=>{
+  e.preventDefault();
+  const input=document.getElementById("taskInput");
+  const text=input.value.trim();
+  if(!text)return;
+  data.tasks.unshift({id:Date.now(),text,done:false});
+  input.value="";
+  save();
+  renderTasks();
+});
+function renderTasks() {
+  const list=document.getElementById("taskList");
+  list.innerHTML="";
+  const items=data.tasks.filter(t=>
+    taskFilter==="all" || (taskFilter==="done"?t.done:!t.done)
+  );
+  items.forEach(t=>{
+    const row=document.createElement("div");
+    row.className="item";
+    const label=document.createElement("span");
+    label.textContent=t.text;
+    if(t.done)label.classList.add("completed");
+    const check=document.createElement("input");
+    check.type="checkbox";
+    check.checked=t.done;
+    check.addEventListener("change",()=>{
+      t.done=check.checked;save();renderTasks();
+    });
+    const del=document.createElement("button");
+    del.textContent="Delete";
+    del.onclick=()=>{
+      data.tasks=data.tasks.filter(x=>x.id!==t.id);
+      save();renderTasks();
+    };
+    row.append(check,label,del);
+    list.appendChild(row);
+  });
+  if(!items.length)list.textContent="No tasks yet. Add your first task!";
+}
+
+// NOTES
+document.getElementById("noteForm").addEventListener("submit",e=>{
+  e.preventDefault();
+  const title=document.getElementById("noteTitle").value.trim();
+  const text=document.getElementById("noteText").value.trim();
+  if(!title||!text)return;
+  data.notes.unshift({id:Date.now(),title,text});
+  e.target.reset();
+  save();renderNotes();
+});
+function renderNotes() {
+  const list=document.getElementById("noteList");
+  list.innerHTML="";
+  data.notes.forEach(n=>{
+    const row=document.createElement("div");
+    row.className="item";
+    const text=document.createElement("span");
+    text.textContent=n.title+" — "+n.text;
+    const del=document.createElement("button");
+    del.textContent="Delete";
+    del.onclick=()=>{
+      data.notes=data.notes.filter(x=>x.id!==n.id);
+      save();renderNotes();
+    };
+    row.append(text,del);
+    list.appendChild(row);
+  });
+  if(!data.notes.length)list.textContent="No saved notes yet.";
+}
+
+// FOCUS TIMER
+let seconds=25*60;
+let timerInterval=null;
+function updateTimer() {
+  const m=Math.floor(seconds/60);
+  const s=seconds%60;
+  document.getElementById("timer").textContent=
+    String(m).padStart(2,"0")+":"+String(s).padStart(2,"0");
+}
+function setTimer(minutes) {
+  clearInterval(timerInterval);
+  timerInterval=null;
+  seconds=minutes*60;
+  document.getElementById("timerStart").textContent="▶ Start";
+  updateTimer();
+}
+function resetTimer() {setTimer(25)}
+document.getElementById("timerStart").addEventListener("click",()=>{
+  const button=document.getElementById("timerStart");
+  if(timerInterval) {
+    clearInterval(timerInterval);
+    timerInterval=null;
+    button.textContent="▶ Start";
+    return;
+  }
+  button.textContent="Ⅱ Pause";
+  timerInterval=setInterval(()=>{
+    if(seconds>0) {
+      seconds--;
+      updateTimer();
+    } else {
+      clearInterval(timerInterval);
+      timerInterval=null;
+      button.textContent="▶ Start";
+      data.focusDate=today();
+      data.focus++;
+      save();
+      alert("Focus session complete. Great work!");
+    }
+  },1000);
+});
+
+// CALCULATOR
+let expression="";
+function calcAdd(value) {
+  expression+=value;
+  showCalc();
+}
+function calcClear() {
+  expression="";
+  showCalc();
+}
+function calcBack() {
+  expression=expression.slice(0,-1);
+  showCalc();
+}
+function showCalc() {
+  document.getElementById("display").textContent=expression||"0";
+}
+function calculate() {
+  try {
+    if(!/^[0-9+\-*/(). ]+$/.test(expression))throw Error();
+    const result=Function('"use strict";return ('+expression+')')();
+    if(!Number.isFinite(result))throw Error();
+    expression=String(Number(result.toFixed(9)));
+    showCalc();
+  } catch(e) {
+    document.getElementById("display").textContent="Invalid calculation";
+    expression="";
+  }
+}
+
+// UNIT CONVERTER
+const units={
+ length:{
+  m:1,km:1000,cm:.01,mm:.001,inch:.0254,foot:.3048
+ },
+ weight:{
+  kg:1,g:.001,mg:.000001,lb:.453592,tonne:1000
+ },
+ temperature:["C","F","K"]
+};
+const unitType=document.getElementById("unitType");
+const unitFrom=document.getElementById("unitFrom");
+const unitTo=document.getElementById("unitTo");
+function fillUnits() {
+  const type=unitType.value;
+  const keys=Array.isArray(units[type])?units[type]:Object.keys(units[type]);
+  unitFrom.innerHTML="";
+  unitTo.innerHTML="";
+  keys.forEach(k=>{
+    unitFrom.add(new Option(k,k));
+    unitTo.add(new Option(k,k));
+  });
+  unitFrom.value=keys[0];
+  unitTo.value=keys[1]||keys[0];
+  convert();
+}
+function convert() {
+  const type=unitType.value;
+  const value=Number(document.getElementById("unitValue").value);
+  const from=unitFrom.value;
+  const to=unitTo.value;
+  if(!Number.isFinite(value)) {
+    document.getElementById("unitResult").textContent="Enter a number";
+    return;
+  }
+  let result;
+  if(type==="temperature") {
+    const c=from==="C"?value:from==="F"?(value-32)*5/9:value-273.15;
+    result=to==="C"?c:to==="F"?c*9/5+32:c+273.15;
+  } else {
+    result=value*units[type][from]/units[type][to];
+  }
+  document.getElementById("unitResult").textContent=
+    Number(result.toFixed(6))+" "+to;
+}
+function swapUnits() {
+  const old=unitFrom.value;
+  unitFrom.value=unitTo.value;
+  unitTo.value=old;
+  convert();
+}
+unitType.addEventListener("change",fillUnits);
+unitFrom.addEventListener("change",convert);
+unitTo.addEventListener("change",convert);
+document.getElementById("unitValue").addEventListener("input",convert);
+fillUnits();
+
+// HABITS
+document.getElementById("habitForm").addEventListener("submit",e=>{
+  e.preventDefault();
+  const input=document.getElementById("habitInput");
+  const name=input.value.trim();
+  if(!name)return;
+  if(data.habits.some(h=>h.name.toLowerCase()===name.toLowerCase())) {
+    alert("This habit is already added.");
+    return;
+  }
+  data.habits.push({id:Date.now(),name,date:""});
+  input.value="";
+  save();renderHabits();
+});
+function renderHabits() {
+  const list=document.getElementById("habitList");
+  list.innerHTML="";
+  data.habits.forEach(h=>{
+    const row=document.createElement("div");
+    row.className="item";
+    const name=document.createElement("span");
+    name.textContent=h.name;
+    const check=document.createElement("button");
+    check.textContent=h.date===today()?"✓ Done":"Mark done";
+    check.onclick=()=>{
+      h.date=h.date===today()?"":today();
+      save();renderHabits();
+    };
+    const del=document.createElement("button");
+    del.textContent="Delete";
+    del.onclick=()=>{
+      data.habits=data.habits.filter(x=>x.id!==h.id);
+      save();renderHabits();
+    };
+    row.append(name,check,del);
+    list.appendChild(row);
+  });
+  if(!data.habits.length)list.textContent="Add your first positive habit.";
+}
+
+// DAILY INSPIRATION
+const messages=[
+  "Small steps can lead to great achievements.",
+  "Keep learning. Your ideas matter.",
+  "Be kind to yourself and others.",
+  "Every day is a new opportunity to improve.",
+  "Good things grow through patience and practice.",
+  "You can make a positive difference.",
+  "Start small and keep moving forward."
+];
+function newQuote() {
+  const message=messages[Math.floor(Math.random()*messages.length)];
+  document.getElementById("quoteText").textContent=message;
+}
+document.getElementById("dailyQuote").textContent=messages[
+  new Date().getDate()%messages.length
+];
+
+// BACKUP
+function exportData() {
+  const file=new Blob([JSON.stringify(data,null,2)],{
+    type:"application/json"
+  });
+  const url=URL.createObjectURL(file);
+  const link=document.createElement("a");
+  link.href=url;
+  link.download="goodspace-backup.json";
+  link.click();
+  URL.revokeObjectURL(url);
+}
+function importData() {
+  const file=document.getElementById("backupFile").files[0];
+  if(!file) {
+    alert("Please choose a backup file.");
+    return;
+  }
+  const reader=new FileReader();
+  reader.onload=()=>{
+    try {
+      const incoming=JSON.parse(reader.result);
+      if(!incoming || !Array.isArray(incoming.tasks) ||
+         !Array.isArray(incoming.notes) ||
+         !Array.isArray(incoming.habits)) {
+        throw Error("Invalid backup");
+      }
+      if(!confirm("Replace your current data with this backup?"))return;
+      data={
+        tasks:incoming.tasks,
+        notes:incoming.notes,
+        habits:incoming.habits,
+        focus:incoming.focus||0,
+        focusDate:incoming.focusDate||""
+      };
+      save();
+      renderTasks();renderNotes();renderHabits();
+      alert("Backup restored.");
+    } catch(e) {
+      alert("This backup file is not valid.");
+    }
+  };
+  reader.readAsText(file);
+}
+function clearData() {
+  if(!confirm("Delete all your saved GOODSPACE data?"))return;
+  data=freshData();
+  save();
+  renderTasks();renderNotes();renderHabits();
+  alert("Your data has been cleared.");
+}
+
+// INITIAL DISPLAY
+renderTasks();
+renderNotes();
+renderHabits();
+updateStats();
+updateTimer();
+
+</script>
+</body>
+</html>
